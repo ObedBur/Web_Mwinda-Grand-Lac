@@ -42,8 +42,8 @@ const About: React.FC = () => {
           <div ref={imageRef} className="relative">
             <div className="aspect-square md:aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1000" 
-                alt="Equipe Mwinda à Goma" 
+                src="/equipe-mwinda.jpg"
+                alt="Développeur web professionnel à Goma - Équipe MWINDA GRANDS-LACS" 
                 className="w-full h-full object-cover"
               />
             </div>

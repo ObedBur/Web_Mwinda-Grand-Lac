@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import WhyChooseUs from './components/WhyChooseUs';
-import ServicesSection from './components/ServicesSection';
-import Portfolio from './components/Portfolio';
-import Testimonials from './components/Testimonials';
-import About from './components/About';
-import ContactSection from './components/ContactSection';
-import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
+
+// Lazy load non-critical components
+const WhyChooseUs = React.lazy(() => import('./components/WhyChooseUs'));
+const ServicesSection = React.lazy(() => import('./components/ServicesSection'));
+const Portfolio = React.lazy(() => import('./components/Portfolio'));
+const Testimonials = React.lazy(() => import('./components/Testimonials'));
+const About = React.lazy(() => import('./components/About'));
+const ContactSection = React.lazy(() => import('./components/ContactSection'));
+const Footer = React.lazy(() => import('./components/Footer'));
+const WhatsAppButton = React.lazy(() => import('./components/WhatsAppButton'));
+
+// Loading fallback
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center py-20">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-mwinda-orange"></div>
+  </div>
+);
 
 function App() {
   return (
@@ -16,15 +25,19 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <WhyChooseUs />
-        <ServicesSection />
-        <Portfolio />
-        <Testimonials />
-        <About />
-        <ContactSection />
+        <Suspense fallback={<LoadingSpinner />}>
+          <WhyChooseUs />
+          <ServicesSection />
+          <Portfolio />
+          <Testimonials />
+          <About />
+          <ContactSection />
+        </Suspense>
       </main>
-      <Footer />
-      <WhatsAppButton />
+      <Suspense fallback={null}>
+        <Footer />
+        <WhatsAppButton />
+      </Suspense>
     </div>
   );
 }

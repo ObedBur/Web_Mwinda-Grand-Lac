@@ -1,7 +1,8 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Send, Phone, Mail, MapPin } from 'lucide-react';
+import { Send, Phone, Mail, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,6 +10,17 @@ const ContactSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const infoRef = useRef<HTMLDivElement>(null);
+
+  // Form states
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    service: '',
+    message: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -38,10 +50,58 @@ const ContactSection: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    alert("Merci pour votre message. L'équipe Mwinda vous répondra sous peu.");
+    setIsLoading(true);
+    setSubmitStatus('idle');
+    setErrorMessage('');
+
+    try {
+      // Configuration EmailJS
+      const serviceID = 'service_u2pwpa5'; // ✅ Gmail Service
+      const templateID = 'template_n7k0sz9'; // ✅ Contact Us Template
+      const publicKey = 'llDCHpqelGMiQRs-P'; // ✅ Public Key configurée
+
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        service: formData.service,
+        message: formData.message,
+        to_email: 'obedburindi@gmail.com'
+      };
+
+      await emailjs.send(serviceID, templateID, templateParams, publicKey);
+
+      setSubmitStatus('success');
+      // Reset form
+      setFormData({ name: '', email: '', service: '', message: '' });
+      if (formRef.current) formRef.current.reset();
+
+    } catch (error: any) {
+      console.error('Erreur d\'envoi EmailJS:', error);
+      setSubmitStatus('error');
+
+      // Message d'erreur plus détaillé
+      let errorMsg = 'Une erreur est survenue. ';
+
+      if (error.text) {
+        errorMsg += `Détails: ${error.text}. `;
+      } else if (error.message) {
+        errorMsg += `${error.message}. `;
+      }
+
+      errorMsg += 'Veuillez vérifier votre configuration EmailJS ou nous contacter par téléphone.';
+      setErrorMessage(errorMsg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -129,18 +189,26 @@ const ContactSection: React.FC = () => {
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Nom complet</label>
                   <input 
-                    type="text" 
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all"
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all disabled:opacity-50"
                     placeholder="Votre nom"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
                   <input 
-                    type="email" 
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all"
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all disabled:opacity-50"
                     placeholder="votre@email.com"
                   />
                 </div>
@@ -149,8 +217,14 @@ const ContactSection: React.FC = () => {
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">Service concerné</label>
                 <div className="relative">
-                  <select className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all text-slate-700 appearance-none font-medium">
-                    <option value="" disabled selected>Sélectionnez une option...</option>
+                  <select
+                    name="service"
+                    value={formData.service}
+                    onChange={handleChange}
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all text-slate-700 appearance-none font-medium disabled:opacity-50"
+                  >
+                    <option value="" disabled>Sélectionnez une option...</option>
                     <optgroup label="NETTOYAGE & ENTRETIEN">
                       <option>Nettoyage Résidentiel (Ménage)</option>
                       <option>Nettoyage Commercial (Bureaux/Magasins)</option>
@@ -173,19 +247,51 @@ const ContactSection: React.FC = () => {
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">Détails du projet</label>
                 <textarea 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows={4}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all resize-none"
+                  disabled={isLoading}
+                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-mwinda-green focus:ring-2 focus:ring-mwinda-green/20 outline-none transition-all resize-none disabled:opacity-50"
                   placeholder="Décrivez vos besoins (surface à nettoyer, type de site web, etc.)..."
                 ></textarea>
               </div>
 
+              {/* Success/Error Messages */}
+              {submitStatus === 'success' && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3 text-green-800">
+                  <CheckCircle size={20} className="shrink-0" />
+                  <p className="text-sm font-medium">Message envoyé avec succès ! Nous vous répondrons sous peu.</p>
+                </div>
+              )}
+
+              {submitStatus === 'error' && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3 text-red-800">
+                  <AlertCircle size={20} className="shrink-0 mt-0.5" />
+                  <p className="text-sm font-medium">{errorMessage}</p>
+                </div>
+              )}
+
               <button 
                 type="submit"
-                className="w-full py-4 bg-slate-900 text-white rounded-lg font-bold text-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-slate-900/20"
+                disabled={isLoading}
+                className="w-full py-4 bg-slate-900 text-white rounded-lg font-bold text-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-slate-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <span>Envoyer ma demande</span>
-                <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Envoi en cours...</span>
+                  </>
+                ) : (
+                  <>
+                      <span>Envoyer ma demande</span>
+                      <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </button>
             </div>
           </form>

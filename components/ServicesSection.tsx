@@ -22,78 +22,86 @@ const cleaningServices: ServiceCategory = {
   id: 'cleaning',
   title: 'Pôle Nettoyage',
   subtitle: 'Hygiène & Entretien',
-  description: 'Un environnement sain pour un confort optimal. Nous intervenons chez les particuliers et les professionnels.',
+  description:
+    'Un environnement sain pour un confort optimal. Nous intervenons chez les particuliers et les professionnels.',
   colorTheme: 'green',
   items: [
-    { 
-      title: 'Nettoyage Résidentiel', 
-      description: 'Ménage professionnel pour maisons. Personnel expérimenté et de confiance.', 
+    {
+      title: 'Nettoyage Résidentiel',
+      description:
+        'Ménage professionnel pour maisons. Personnel expérimenté et de confiance.',
       icon: Home,
-      image: '/nettoyage-residentiel.jpg'
+      image: '/nettoyage-residentiel.jpg',
     },
-    { 
-      title: 'Repassage Professionnel', 
-      description: 'Service soigné à domicile. Formules abonnement mensuel ou journalier.', 
+    {
+      title: 'Repassage Professionnel',
+      description:
+        'Service soigné à domicile. Formules abonnement mensuel ou journalier.',
       icon: Shirt,
-      image: '/repassage-professionnel.jpg'
+      image: '/repassage-professionnel.jpg',
     },
-    { 
-      title: 'Fin de Chantier', 
-      description: 'Remise en état après travaux. Élimination des débris et poussières.', 
+    {
+      title: 'Fin de Chantier',
+      description:
+        'Remise en état après travaux. Élimination des débris et poussières.',
       icon: HardHat,
-      image: '/fin-de-chantier.jpg'
+      image: '/fin-de-chantier.jpg',
     },
-    { 
-      title: 'Nettoyage Commercial', 
-      description: 'Bureaux, magasins, écoles, hôpitaux et salles de fête.', 
+    {
+      title: 'Nettoyage Commercial',
+      description:
+        'Bureaux, magasins, écoles, hôpitaux et salles de fête.',
       icon: Building2,
-      image: '/nettoyage-commercial.jpg'
+      image: '/nettoyage-commercial.jpg',
     },
-    { 
-      title: 'Nettoyage Profond', 
-      description: 'Shampouinage canapés, matelas, tapis et nettoyage automobile.', 
+    {
+      title: 'Nettoyage Profond',
+      description:
+        'Shampouinage canapés, matelas, tapis et nettoyage automobile.',
       icon: Sparkles,
-      image: '/nettoyage-profond.jpg'
+      image: '/nettoyage-profond.jpg',
     },
-  ]
+  ],
 };
+
+
 
 const digitalServices: ServiceCategory = {
   id: 'digital',
   title: 'Pôle Digital',
-  subtitle: 'Communication & Média',
-  description: 'Propulsez votre marque. De la création web à la gestion médiatique via "Digital Media News".',
+  subtitle: 'Communication Digitale et Média en Ligne',
+  description: 'Création Web, Marketing Digital, SEO, Gestion de Réseaux Sociaux, et Média "Digital Media News".',
   colorTheme: 'orange',
   items: [
     { 
       title: 'Création Web', 
-      description: 'Sites vitrines, E-commerce, WordPress, PrestaShop sur mesure.', 
+      description: 'Sites vitrines, E-commerce, WordPress, PrestaShop, applications web sur mesure.', 
       icon: Globe,
-      image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=600' // Black woman tech/laptop
-    },
-    { 
-      title: 'Apps & CRM', 
-      description: 'Développement d\'applications mobiles et outils de gestion CRM.', 
-      icon: Smartphone,
-      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600' // Diverse team working
+      image: '/creation-web.jpg'
     },
     { 
       title: 'Marketing Digital', 
-      description: 'Stratégie, SEO/SEA, Social Ads et Gestion des réseaux sociaux.', 
+      description: 'Stratégie digitale complète, campagnes publicitaires et Social Ads performants.', 
       icon: Megaphone,
-      image: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=600' // Black man presenting/strategy
+      image: '/marketing-digital.jpg'
     },
     { 
-      title: 'Maintenance & Branding', 
-      description: 'Identité visuelle, maintenance technique et optimisation.', 
+      title: 'SEO',
+      description: 'Optimisation pour moteurs de recherche, SEO/SEA et amélioration du référencement naturel.', 
       icon: Settings,
-      image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=600' // Creative team office
+      image: '/maintenance-branding.jpg'
     },
     { 
-      title: 'Média en Ligne', 
-      description: 'Digital Media News : Reportages, publicités et relations presse.', 
+      title: 'Gestion de Réseaux Sociaux',
+      description: 'Community management, création de contenu et animation de vos réseaux sociaux.',
+      icon: Smartphone,
+      image: '/apps-crm.jpg'
+    },
+    {
+      title: 'Média "Digital Media News"',
+      description: 'Média en ligne : Reportages, publicités, relations presse et couverture événementielle.', 
       icon: Newspaper,
-      image: 'https://images.unsplash.com/photo-1531498860502-7c67cf02f657?auto=format&fit=crop&q=80&w=600' // Woman with camera/media
+      image: '/media-en-ligne.jpg'
     },
   ]
 };
